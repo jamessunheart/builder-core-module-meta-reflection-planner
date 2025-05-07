@@ -1,11 +1,13 @@
 import datetime
 from self_diagnostic_engine import SelfDiagnosticEngine
+from core_memory_hub import CoreMemoryHub
 
 class MetaReflectionPlanner:
     def __init__(self):
         self.planning_log = []
         self.last_run = None
         self.diagnostics = SelfDiagnosticEngine()
+        self.memory = CoreMemoryHub()
 
     def auto_reflect(self):
         diagnostics_report = self.diagnostics.run_diagnostics()
@@ -26,7 +28,9 @@ class MetaReflectionPlanner:
                 plan["actions"].append("Synchronize all API calls with latest OpenAPI spec.")
             elif "fallback" in issue:
                 plan["actions"].append("Add new routing rule to task_intent_router.")
+
         self.planning_log.append(plan)
+        self.memory.remember(f"Reflection on diagnostics @ {now.isoformat()} → Actions: {plan['actions']}", tags=["reflection", "planning"])
         return plan
 
     def get_planning_history(self):
